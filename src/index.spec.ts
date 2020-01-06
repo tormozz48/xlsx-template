@@ -4,7 +4,7 @@ import {expect} from 'chai';
 import {XLSXPopulateTemplate} from './index';
 
 describe('xlsx-template', () => {
-    describe('applyTemplate', () => {
+    describe('single cells', () => {
         let xlsxPopulateTemplate;
 
         beforeEach(async () => {
@@ -54,7 +54,7 @@ describe('xlsx-template', () => {
         });
 
         it('should apply date format if date formatter is set', async () => {
-            xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('date(data.foo dd-mmm-yyyy)');
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('date(data.foo dd/mmm/yyyy)');
             xlsxPopulateTemplate.applyData({data: {foo: new Date(2020, 0, 6)}});
 
             const buffer = await xlsxPopulateTemplate.toBuffer();
@@ -62,7 +62,19 @@ describe('xlsx-template', () => {
             const cell = xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1');
 
             expect(cell.value()).to.equal(43836);
-            expect(cell.style('numberFormat')).to.equal('dd-mmm-yyyy');
+            expect(cell.style('numberFormat')).to.equal('dd/mmm/yyyy');
+        });
+
+        it('should apply default date format if format was not provided', async () => {
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('date(data.foo)');
+            xlsxPopulateTemplate.applyData({data: {foo: new Date(2020, 0, 6)}});
+
+            const buffer = await xlsxPopulateTemplate.toBuffer();
+            await xlsxPopulateTemplate.loadTemplate(buffer);
+            const cell = xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1');
+
+            expect(cell.value()).to.equal(43836);
+            expect(cell.style('numberFormat')).to.equal('dd-mm-yyyy');
         });
 
         it('should number format if number formatter is set', async () => {
@@ -75,6 +87,18 @@ describe('xlsx-template', () => {
 
             expect(cell.value()).to.equal(3.14159);
             expect(cell.style('numberFormat')).to.equal('0.00');
+        });
+
+        it('should set General format if format was not provided', async () => {
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('number(data.foo)');
+            xlsxPopulateTemplate.applyData({data: {foo: '3.14159'}});
+
+            const buffer = await xlsxPopulateTemplate.toBuffer();
+            await xlsxPopulateTemplate.loadTemplate(buffer);
+            const cell = xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1');
+
+            expect(cell.value()).to.equal(3.14159);
+            expect(cell.style('numberFormat')).to.equal('General');
         });
 
         it('should format value as link if link formatter is set', async () => {
@@ -99,5 +123,9 @@ describe('xlsx-template', () => {
 
             expect(value).to.equal('str(data.foo)');
         });
+    });
+
+    describe('cell ranges (iteration)', () => {
+
     });
 });

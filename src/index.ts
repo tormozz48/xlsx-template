@@ -38,48 +38,66 @@ export class XLSXPopulateTemplate {
         return this.wb.toFileAsync(filePath);
     }
 
-    private applyStringCells(data: any): void {
-        this.wb.find(/^str\((.+)\)$/g, (match) => {
-            const [, placeholder] = match.match(/^str\((.+)\)$/);
+    private applyStringCells(data: any): XLSXPopulateTemplate {
+        const REG_EXP = '^str\\((.+)\\)$';
+        const cellMatcher = new RegExp(REG_EXP, 'g');
+        const placeholderMatcher = new RegExp(REG_EXP);
+
+        this.wb.find(cellMatcher, (match) => {
+            const [, placeholder] = match.match(placeholderMatcher);
             return _.get(data, placeholder, '');
         });
+
+        return this;
     }
 
-    private applyNumberCells(data: any): void {
-        const cells = this.wb.find(/^number\((.+)\)$/g);
+    private applyNumberCells(data: any): XLSXPopulateTemplate {
+        const REG_EXP = '^number\\((\\S+)\\s?(\\S+)?\\)$';
+        const cellMatcher = new RegExp(REG_EXP, 'g');
+        const placeholderMatcher = new RegExp(REG_EXP);
 
-        cells.forEach((cell) => {
-            const [, placeholder, format] = cell.value().match(/^number\((\S+)\s?(\S+)?\)$/);
+        this.wb.find(cellMatcher).forEach((cell) => {
+            const [, placeholder, format] = cell.value().match(placeholderMatcher);
             cell.value(_.get(data, placeholder, ''));
             if (format) {
                 cell.style('numberFormat', format);
             }
         });
+
+        return this;
     }
 
     private applyDateCells(data: any): void {
-        const cells = this.wb.find(/^date\((.+)\)$/g);
+        const REG_EXP = '^date\\((\\S+)\\s?(\\S+)?\\)$';
+        const cellMatcher = new RegExp(REG_EXP, 'g');
+        const placeholderMatcher = new RegExp(REG_EXP);
 
-        cells.forEach((cell) => {
-            const [, placeholder, format = 'dd-mm-yyyy'] = cell.value().match(/^date\((\S+)\s?(\S+)?\)$/);
+        this.wb.find(cellMatcher).forEach((cell) => {
+            const [, placeholder, format] = cell.value().match(placeholderMatcher);
             cell.value(_.get(data, placeholder, ''));
-            cell.style('numberFormat', format);
+            cell.style('numberFormat', format || 'dd-mm-yyyy');
         });
     }
 
     private applyLinkCells(data: any): void {
-        const cells = this.wb.find(/^link\((.+)\)$/g);
+        const REG_EXP = '^link\\((.+)\\)$';
+        const cellMatcher = new RegExp(REG_EXP, 'g');
+        const placeholderMatcher = new RegExp(REG_EXP);
 
-        cells.forEach((cell) => {
-            const [, placeholder] = cell.value().match(/^link\((.+)\)$/);
+        this.wb.find(cellMatcher).forEach((cell) => {
+            const [, placeholder] = cell.value().match(placeholderMatcher);
             cell.value(_.get(data, `${placeholder}.text`, ''));
             cell.hyperlink(_.get(data, `${placeholder}.ref`));
         });
     }
 
     private applyRawCells(): void {
-        this.wb.find(/^\{(.+)\}$/g, (match) => {
-            const [, placeholder] = match.match(/^\{(.+)\}$/);
+        const REG_EXP = '^\\{(.+)\\}$';
+        const cellMatcher = new RegExp(REG_EXP, 'g');
+        const placeholderMatcher = new RegExp(REG_EXP);
+
+        this.wb.find(cellMatcher, (match) => {
+            const [, placeholder] = match.match(placeholderMatcher);
             return placeholder;
         });
     }

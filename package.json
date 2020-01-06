@@ -4,10 +4,11 @@
   "description": "Library for applying your data for given xlsx template with some advanced features",
   "main": "index.js",
   "scripts": {
-    "build": "ts",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./dist",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "test:watch": "npm test -- --watch --extension *.ts",
     "test:cov": "nyc npm run test"
   },
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.4",
     "@types/chai": "^4.2.7",
+    "@types/lodash": "^4.14.149",
     "@types/mocha": "^5.2.7",
     "@types/node": "^13.1.4",
     "chai": "^4.2.0",
@@ -60,5 +62,9 @@
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",
     "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "xlsx-populate2": "^1.19.1"
   }
 }

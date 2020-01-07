@@ -8,7 +8,7 @@
     "clean": "rm -rf ./dist",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test:watch": "npm test -- --watch --extension *.ts",
     "test:cov": "nyc npm run test"
   },

@@ -14,8 +14,8 @@ npm install xlsx-template
 Assume there file `./template-simple.xlsx` xlsx file in your working directory with given content:
 | # | A | B | C | D | E |
 | - | - | - | - | - | - |
-| 1 | str(data.strVal) |  |  |  |  |
-| 2 |                  |  |  |  |  |
+| 1 |   |   |   |   |   |
+| 2 |   |   |   |   |   |
 
 ```js
 const {XLSXPopulateTemplate} = require('../../dist');

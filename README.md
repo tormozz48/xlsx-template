@@ -15,8 +15,8 @@ Assume there file `./template-simple.xlsx` xlsx file in your working directory w
 
 | # | A | B | C | D | E |
 | - | - | - | - | - | - |
-| 1 | `str(data.strVal)` | `number(data.numberVal 0.00)` | `date(data.dateVal dd/mm/yyyy)` | `link(data.linkVal)` | `{str(data.strVal)}` |
-| 2 |   | `number(data.numberVal)` | `date(data.dateVal)` | | |
+| 1 | str(data.strVal) | number(data.numberVal 0.00) | date(data.dateVal dd/mm/yyyy) | link(data.linkVal) | {str(data.strVal)} |
+| 2 |   | number(data.numberVal) | date(data.dateVal) | | |
 
 ```js
 const {XLSXPopulateTemplate} = require('../../dist');

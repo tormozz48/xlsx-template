@@ -27,7 +27,7 @@ xlsxPopulateTemplate.applyData({
     data: {
         strVal: 'Some String value',
         numberVal: 3.14159,
-        dateVal: new Date(2019, 0, 6),
+        dateVal: new Date(2020, 0, 6),
         linkVal: {text: 'some link', ref: 'http://github.com'}
     }
 });
@@ -39,22 +39,22 @@ It also will set valid format to cells according to used placeholders.
 
 | # | A | B | C | D | E |
 | - | - | - | - | - | - |
-| 1 | Some String value  | 3,14  |  06/01/2019 | [some link](http://github.com)  | str(data.strVal) |
-| 2 |   | 3,14159  | 06-01-2019 |   |   |
+| 1 | Some String value  | 3,14  |  06/01/2020 | [some link](http://github.com)  | str(data.strVal) |
+| 2 |   | 3,14159  | 06-01-2020 |   |   |
 
 
 ## Placeholders
 
 ### str()
 
-Paste given value to cell marked with placeholder and use default cell string formatter.
+Paste given value to a cell marked with placeholder and use default cell string formatter.
 
 | # | A |
 | - | - |
 | 1 | str(data.foo) |
 
 ```js
-xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}})
+xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}});
 ```
 
 | # | A |
@@ -63,7 +63,7 @@ xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}})
 
 ### number()
 
-Paste given value to cell and use number formatter. Optionally use second argument of number placeholder function to specify
+Paste given value to a cell and use number formatter. Optionally use second argument of number placeholder function to specify
 number format which should be applied to cell value.
 
 | # | A |
@@ -71,7 +71,7 @@ number format which should be applied to cell value.
 | 1 | number(data.foo, 0.00) |
 
 ```js
-xlsxPopulateTemplate.applyData({data: {foo: 3.14159}})
+xlsxPopulateTemplate.applyData({data: {foo: 3.14159}});
 ```
 
 | # | A |
@@ -80,9 +80,64 @@ xlsxPopulateTemplate.applyData({data: {foo: 3.14159}})
 
 ### date()
 
+Paste given value to a cell and use date formatter. Optionally use second argument of date placeholder function to specify
+date format which should be applied to cell value. Default date format is `dd-mm-yyyy`.
+
+| # | A |
+| - | - |
+| 1 | date(data.foo dd/mm/yyyy) |
+
+```js
+xlsxPopulateTemplate.applyData({data: {foo: new Date(2020, 0, 9)}});
+```
+
+| # | A |
+| - | - |
+| 1 | 09/01/2020 |
+
 ### link()
 
+Create link value in cell with placeholder. Needs to receive data item as object with fields: `text` and `ref` where `text` - is
+link text representation and `ref` - is link reference url.
+
+| # | A |
+| - | - |
+| 1 | link(data.foo) |
+
+```js
+xlsxPopulateTemplate.applyData({data: {foo: {text: 'Github', ref: 'https://github.com'}}});
+```
+
+| # | A |
+| - | - |
+| 1 | [Github](https://github.com) |
+
+
 ### {} - raw formatter
+
+A special formatter which allows to simply expand inner placeholder without appliyng it. It is useful when
+there you need to fill template with some part of needed data at first stage and then fill rest of data at second stage.
+
+| # | A |
+| - | - |
+| 1 | {str(data.foo)} |
+
+```js
+xlsxPopulateTemplate.applyData({});
+```
+After first call it simply expand inner placeholder `str(data.foo)` so it will be ready to use on next call.
+
+| # | A |
+| - | - |
+| 1 | str(data.foo) |
+
+```js
+xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}});
+```
+
+| # | A |
+| - | - |
+| 1 | Hello World |
 
 ## API
 
@@ -151,3 +206,13 @@ workbook.sheet('Sheet1').cell('A1').value('Foo');
 ```
 
 ## Development
+
+Some useful commands for development:
+
+* `npm run build` - compile typescript code into javascript code.
+* `npm run clean` - clean js dist folder with compiled javascript code.
+* `npm run format` - performs code formatting via prettier tool.
+* `npm run lint` - run tslint syntax checker.
+* `npm run test` - run mocha tests.
+* `npm run test -watch` - run mocha tests in "watch" mode. Launch tests on every code change.
+* `npm run test -cov` - run mocha tests with coverage calculation.

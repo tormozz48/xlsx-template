@@ -2,6 +2,7 @@
 Fill workbook by given data into places marked by special placeholders.
 
 [![Build Status](https://travis-ci.org/tormozz48/xlsx-template.svg?branch=master)](https://travis-ci.org/tormozz48/xlsx-template)
+[![codecov](https://codecov.io/gh/tormozz48/xlsx-template/branch/master/graph/badge.svg)](https://codecov.io/gh/tormozz48/xlsx-template)
 
 ## Install
 
@@ -42,6 +43,45 @@ It also will set valid format to cells according to used placeholders.
 | 1 | Some String value  | 3,14  |  06/01/2020 | [some link](http://github.com)  | str(data.strVal) |
 | 2 |   | 3,14159  | 06-01-2020 |   |   |
 
+### Apply array values.
+
+It is possible to fill range of rows by values given as array. For example for array of objects such as:
+```js
+[
+    {
+        strVal: 'Github',
+        numberVal: 134.1222,
+        dateVal: new Date(2020, 1, 1),
+        linkVal: {text: 'github', ref: 'https://github.com'}
+    },
+    {
+        strVal: 'Facebook',
+        numberVal: 4352.232,
+        dateVal: new Date(2020, 2, 23),
+        linkVal: {text: 'facebook', ref: 'https://facebook.com'}
+    },
+    {
+        strVal: 'Google',
+        numberVal: 733.2122321,
+        dateVal: new Date(2020, 3, 7),
+        linkVal: {text: 'google', ref: 'https://google.com'}
+    }
+]
+```
+
+following template
+
+| # | A | B | C | D |
+| - | - | - | - | - |
+| 1 | str(data[i].strVal) | number(data[i].numberVal 0.00) | date(data[i].dateVal dd/mm/yyyy) | link(data[i].linkVal) |
+
+will fill first three rows by corresponded values from data array:
+
+| # | A | B | C | D |
+| - | - | - | - | - |
+| 1 | Github | 134,12 |	01/02/2020 | github |
+| 2 | Facebook | 4352,23 |	23/03/2020 | facebook |
+| 3 | Google |	733,21 | 07/04/2020 | google |
 
 ## Placeholders
 
@@ -138,6 +178,29 @@ xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}});
 | # | A |
 | - | - |
 | 1 | Hello World |
+
+### array item plaholders
+
+To fill multiple rows below by corresponded array items you should use `[i]` to mark data node
+that should be applied as array of items.
+
+| # | A |
+| - | - |
+| 1 | str(data[i].name) |
+
+```js
+xlsxPopulateTemplate.applyData({data: [
+    {name: 'Github'},
+    {name: 'Facebook'},
+    {name: 'Google'}
+]);
+```
+
+| # | A |
+| - | - |
+| 1 | Github |
+| 2 | Facebook |
+| 3 | Google |
 
 ## API
 

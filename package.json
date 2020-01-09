@@ -12,7 +12,7 @@
     "test:watch": "npm test -- --watch --extension *.ts",
     "test:cov": "nyc npm run test",
     "version": "npm run build",
-    "release": "np"
+    "release": "release-it"
   },
   "husky": {
     "hooks": {
@@ -27,9 +27,19 @@
       "config": "./git/commitizen.js"
     }
   },
-  "np": {
-    "yarn": false,
-    "releaseDraft": false
+  "release-it": {
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": false
+    },
+    "hooks": {
+      "before:init": ["npm run lint", "npm test"],
+      "after:bump": "npm run build",
+      "after:git:release": "echo After git push, before github release",
+      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+    }
   },
   "repository": {
     "type": "git",
@@ -64,9 +74,9 @@
     "cz-customizable": "^6.2.0",
     "husky": "^3.1.0",
     "mocha": "^7.0.0",
-    "np": "^5.2.1",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
+    "release-it": "^12.4.3",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",

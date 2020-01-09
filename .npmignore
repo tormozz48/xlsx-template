@@ -1,0 +1,11 @@
+.history
+examples
+test
+src
+git
+.nycrc
+.prettierrc
+.travis.yml
+tsconfig.json
+tslint.json
+README.md

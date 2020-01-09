@@ -113,6 +113,18 @@ describe('xlsx-template', () => {
             expect(cell.hyperlink()).to.equal('http://foo.bar');
         });
 
+        it('should apply visual style to cells with links', async () => {
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('link(data.foo)');
+            xlsxPopulateTemplate.applyData({data: {foo: {text: 'some-link', ref: 'http://foo.bar'}}});
+
+            const buffer = await xlsxPopulateTemplate.toBuffer();
+            await xlsxPopulateTemplate.loadTemplate(buffer);
+            const cell = xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1');
+
+            expect(cell.style('underline')).to.equal(true);
+            expect(cell.style('fontColor')).to.eql({rgb: '0563C1'});
+        });
+
         it('should set default link ref "#" if link reference was not set', async () => {
             xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('link(data.foo)');
             xlsxPopulateTemplate.applyData({data: {foo: {text: 'some-link'}}});

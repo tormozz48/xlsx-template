@@ -4,6 +4,8 @@ import Workbook from 'xlsx-populate2/lib/Workbook';
 import Cell from 'xlsx-populate2/lib/Cell';
 
 export class XLSXPopulateTemplate {
+    private readonly DEFAULT_LINK_COLOR: string = '0563c1';
+
     private wb: Workbook;
 
     public get workbook(): Workbook {
@@ -141,7 +143,12 @@ export class XLSXPopulateTemplate {
 
         this.wb.find(cellMatcher).forEach((cell: Cell) => {
             const [, placeholder] = cell.value().match(placeholderMatcher);
-            this.fillCells({cell, data, placeholder, isLink: true});
+            this
+                .fillCells({cell, data, placeholder, isLink: true})
+                .forEach((upCell) => upCell.style({
+                    fontColor: this.DEFAULT_LINK_COLOR,
+                    underline: true,
+                }));
         });
 
         return this;

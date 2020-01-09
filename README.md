@@ -8,7 +8,7 @@ Fill workbook by given data into places marked by special placeholders.
 
 Install package via npm:
 ```
-npm install xlsx-template
+npm install @tormozz48/xlsx-template
 ```
 
 ## Usage Example

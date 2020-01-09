@@ -1,8 +1,8 @@
 {
-  "name": "xlsx-template",
-  "version": "1.0.0",
+  "name": "@tormozz48/xlsx-template",
+  "version": "0.0.1",
   "description": "Library for applying your data for given xlsx template with some advanced features",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && tsc",
     "clean": "rm -rf ./dist",
@@ -10,7 +10,9 @@
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test:watch": "npm test -- --watch --extension *.ts",
-    "test:cov": "nyc npm run test"
+    "test:cov": "nyc npm run test",
+    "version": "npm run build",
+    "release": "np"
   },
   "husky": {
     "hooks": {
@@ -25,6 +27,10 @@
       "config": "./git/commitizen.js"
     }
   },
+  "np": {
+    "yarn": false,
+    "releaseDraft": false
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tormozz48/xlsx-template.git"
@@ -36,7 +42,10 @@
     "excel",
     "apply",
     "sheet",
-    "placeholder"
+    "placeholder",
+    "cell",
+    "sheet",
+    "workbook"
   ],
   "author": "andrey.kuznetsov48@yandex.ru",
   "license": "MIT",
@@ -55,6 +64,7 @@
     "cz-customizable": "^6.2.0",
     "husky": "^3.1.0",
     "mocha": "^7.0.0",
+    "np": "^5.2.1",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "ts-loader": "^6.2.1",

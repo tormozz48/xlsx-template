@@ -27,20 +27,6 @@
       "config": "./git/commitizen.js"
     }
   },
-  "release-it": {
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": false
-    },
-    "hooks": {
-      "before:init": ["npm run lint", "npm test"],
-      "after:bump": "npm run build",
-      "after:git:release": "echo After git push, before github release",
-      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tormozz48/xlsx-template.git"
@@ -76,7 +62,6 @@
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
-    "release-it": "^12.4.3",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",

@@ -12,6 +12,17 @@ describe('xlsx-template', () => {
             await xlsxPopulateTemplate.loadTemplate();
         });
 
+        it('should throw error if template was not loaded before applying data', async () => {
+            xlsxPopulateTemplate = new XLSXPopulateTemplate();
+
+            try {
+                xlsxPopulateTemplate.applyData({data: {foo: 'bar'}});
+                throw new Error('test failed');
+            } catch (error) {
+                expect(error.message).to.equal('XLSX workbook was not loaded');
+            }
+        });
+
         it('should replace string placeholder', async () => {
             xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('str(data.foo)');
             xlsxPopulateTemplate.applyData({data: {foo: 'bar'}});
@@ -318,6 +329,37 @@ describe('xlsx-template', () => {
                 expect(sheet.cell('B2').value()).to.equal('some-link22');
                 expect(sheet.cell('B2').hyperlink()).to.equal('http://link22');
             });
+        });
+    });
+
+    describe('sheet titles', () => {
+        let xlsxPopulateTemplate;
+
+        beforeEach(async () => {
+            xlsxPopulateTemplate = new XLSXPopulateTemplate();
+            await xlsxPopulateTemplate.loadTemplate();
+        });
+
+        it('should replace str placeholders in sheet titles', async () => {
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').name('str(data.foo)');
+            xlsxPopulateTemplate.applyData({data: {foo: 'bar'}});
+
+            const buffer = await xlsxPopulateTemplate.toBuffer();
+            await xlsxPopulateTemplate.loadTemplate(buffer);
+            const sheetName = xlsxPopulateTemplate.workbook.sheet(0).name();
+
+            expect(sheetName).to.equal('bar');
+        });
+
+        it('should expand raw placeholders in sheet titles', async () => {
+            xlsxPopulateTemplate.workbook.sheet('Sheet1').name('{str(data.foo)}');
+            xlsxPopulateTemplate.applyData({});
+
+            const buffer = await xlsxPopulateTemplate.toBuffer();
+            await xlsxPopulateTemplate.loadTemplate(buffer);
+            const sheetName = xlsxPopulateTemplate.workbook.sheet(0).name();
+
+            expect(sheetName).to.equal('str(data.foo)');
         });
     });
 });

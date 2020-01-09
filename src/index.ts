@@ -5,6 +5,8 @@ import Cell from 'xlsx-populate2/lib/Cell';
 
 export class XLSXPopulateTemplate {
     private readonly DEFAULT_LINK_COLOR: string = '0563c1';
+    private readonly MATCHER_STR: string = '^str\\((.+)\\)$';
+    private readonly MATCHER_RAW: string = '^\\{(.+)\\}$';
 
     private wb: Workbook;
 
@@ -34,6 +36,10 @@ export class XLSXPopulateTemplate {
      * @memberOf XLSXPopulateTemplate
      */
     public applyData(data: any) {
+        if (!this.wb) {
+            throw new Error('XLSX workbook was not loaded');
+        }
+
         data = data || {};
 
         this.applyStringCells(data)
@@ -41,6 +47,9 @@ export class XLSXPopulateTemplate {
             .applyDateCells(data)
             .applyLinkCells(data)
             .applyRawCells();
+
+        this.applySheetStrTitles(data)
+            .applySheetRawTitles();
     }
 
     /**
@@ -70,9 +79,8 @@ export class XLSXPopulateTemplate {
      * @memberOf XLSXPopulateTemplate
      */
     private applyStringCells(data: any): XLSXPopulateTemplate {
-        const REG_EXP: string = '^str\\((.+)\\)$';
-        const cellMatcher: RegExp = new RegExp(REG_EXP, 'g');
-        const placeholderMatcher: RegExp = new RegExp(REG_EXP);
+        const cellMatcher: RegExp = new RegExp(this.MATCHER_STR, 'g');
+        const placeholderMatcher: RegExp = new RegExp(this.MATCHER_STR);
 
         this.wb.find(cellMatcher).forEach((cell: Cell) => {
             const [, placeholder] = cell.value().match(placeholderMatcher);
@@ -162,9 +170,8 @@ export class XLSXPopulateTemplate {
      * @memberOf XLSXPopulateTemplate
      */
     private applyRawCells(): XLSXPopulateTemplate {
-        const REG_EXP: string = '^\\{(.+)\\}$';
-        const cellMatcher: RegExp = new RegExp(REG_EXP, 'g');
-        const placeholderMatcher: RegExp = new RegExp(REG_EXP);
+        const cellMatcher: RegExp = new RegExp(this.MATCHER_RAW, 'g');
+        const placeholderMatcher: RegExp = new RegExp(this.MATCHER_RAW);
 
         this.wb.find(cellMatcher, (match: string) => {
             const [, placeholder] = match.match(placeholderMatcher);
@@ -192,5 +199,33 @@ export class XLSXPopulateTemplate {
             }
             return updatedCell;
         });
+    }
+
+    private applySheetStrTitles(data) {
+        const strMatcher: RegExp = new RegExp(this.MATCHER_STR);
+        this.wb.sheets().forEach((sheet) => {
+            const sheetName: string = sheet.name();
+            const strMatch: string[] = sheetName.match(strMatcher);
+            if (strMatch) {
+                const [, placeholder] = strMatch;
+                sheet.name(_.get(data, placeholder, sheet.name()));
+            }
+        });
+
+        return this;
+    }
+
+    private applySheetRawTitles() {
+        const rawMatcher: RegExp = new RegExp(this.MATCHER_RAW);
+        this.wb.sheets().forEach((sheet) => {
+            const sheetName: string = sheet.name();
+            const rawMatch: string[] = sheetName.match(rawMatcher);
+            if (rawMatch) {
+                const [, placeholder] = rawMatch;
+                sheet.name(placeholder);
+            }
+        });
+
+        return this;
     }
 }

@@ -79,9 +79,9 @@ will fill first three rows by corresponded values from data array:
 
 | # | A | B | C | D |
 | --- | --- | --- | --- | --- |
-| 1 | Github | 134,12 |	01/02/2020 | github |
-| 2 | Facebook | 4352,23 |	23/03/2020 | facebook |
-| 3 | Google |	733,21 | 07/04/2020 | google |
+| 1 | Github | 134,12 |	01/02/2020 | [github](https://github.com) |
+| 2 | Facebook | 4352,23 |	23/03/2020 | [facebook](https://facebook.com) |
+| 3 | Google |	733,21 | 07/04/2020 | [google](https://google.com) |
 
 ## Placeholders
 
@@ -179,7 +179,7 @@ xlsxPopulateTemplate.applyData({data: {foo: 'Hello World'}});
 | --- | --- |
 | 1 | Hello World |
 
-### array item plaholders
+### array item placeholders
 
 To fill multiple rows below by corresponded array items you should use `[i]` to mark data node
 that should be applied as array of items.

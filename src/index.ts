@@ -104,11 +104,10 @@ export class XLSXPopulateTemplate {
         const placeholderMatcher: RegExp = new RegExp(REG_EXP);
 
         this.wb.find(cellMatcher).forEach((cell: Cell) => {
-            const [, placeholder, format] = cell.value().match(placeholderMatcher);
-            const updatedCells = this.fillCells({cell, data, placeholder, isLink: false});
-            if (format) {
-                updatedCells.forEach((upCell) => upCell.style('numberFormat', format));
-            }
+            const [, placeholder, format = '0'] = cell.value().match(placeholderMatcher);
+            this
+                .fillCells({cell, data, placeholder, isLink: false})
+                .forEach((upCell) => upCell.style('numberFormat', format));
         });
 
         return this;

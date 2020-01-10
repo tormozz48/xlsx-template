@@ -109,7 +109,7 @@ describe('xlsx-template', () => {
             const cell = xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1');
 
             expect(cell.value()).to.equal(3.14159);
-            expect(cell.style('numberFormat')).to.equal('General');
+            expect(cell.style('numberFormat')).to.equal('0');
         });
 
         it('should format value as link if link formatter is set', async () => {
@@ -246,7 +246,7 @@ describe('xlsx-template', () => {
                 expect(sheet.cell('B2').value()).to.equal(98.4321);
 
                 ['A1', 'A2', 'B1', 'B2'].forEach((item) => {
-                    expect(sheet.cell(item).style('numberFormat')).to.equal('General');
+                    expect(sheet.cell(item).style('numberFormat')).to.equal('0');
                 });
             });
         });

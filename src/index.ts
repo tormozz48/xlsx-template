@@ -123,7 +123,7 @@ export class XLSXPopulateTemplate {
      * @memberOf XLSXPopulateTemplate
      */
     private applyDateCells(data: any): XLSXPopulateTemplate {
-        const REG_EXP: string = '^date\\((\\S+)\\s?(\\S+)?\\)$';
+        const REG_EXP: string = '^date\\((\\S+)\\s?([\\S|\\s]+)?\\)$';
         const cellMatcher: RegExp = new RegExp(REG_EXP, 'g');
         const placeholderMatcher: RegExp = new RegExp(REG_EXP);
 

@@ -9,7 +9,7 @@ const {XLSXPopulateTemplate} = require('../../dist');
         data: {
             strVal: 'Some String value',
             numberVal: 3.14159,
-            dateVal: new Date(2019, 0, 6),
+            dateVal: new Date(2019, 0, 6, 16, 30),
             linkVal: {text: 'some link', ref: 'http://github.com'}
         }
     });

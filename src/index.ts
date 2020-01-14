@@ -187,6 +187,10 @@ export class XLSXPopulateTemplate {
             dataSet = [dataSet];
         }
 
+        if (dataSet.length === 0) {
+            cell.value('');
+        }
+
         return dataSet.map((item, i: number) => {
             const updatedCell: Cell = cell.relativeCell(i, 0);
             const keyPath: string = `[${i}]${slugPath}`;

@@ -205,6 +205,23 @@ describe('xlsx-template', () => {
                 expect(sheet.cell('B1').value()).to.equal('bar1');
                 expect(sheet.cell('B2').value()).to.equal('bar2');
             });
+
+            it('should leave empty cell if data array is empty too', async () => {
+                xlsxPopulateTemplate.workbook.sheet('Sheet1').cell('A1').value('str(data.foo[i])');
+                xlsxPopulateTemplate.applyData({
+                    data: {
+                        foo: [],
+                    },
+                });
+
+                const buffer = await xlsxPopulateTemplate.toBuffer();
+                await xlsxPopulateTemplate.loadTemplate(buffer);
+                const sheet = xlsxPopulateTemplate.workbook.sheet('Sheet1');
+
+                ['A1', 'A2', 'A3'].forEach((cellId) => {
+                    expect(sheet.cell(cellId).value()).to.equal(undefined);
+                });
+            });
         });
 
         describe('number cells', () => {

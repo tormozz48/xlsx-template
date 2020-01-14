@@ -1,6 +1,6 @@
 {
   "name": "@tormozz48/xlsx-template",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Library for applying your data for given xlsx template with some advanced features",
   "main": "dist/index.js",
   "scripts": {

@@ -12,7 +12,9 @@
     "test:watch": "npm test -- --watch --extension *.ts",
     "test:cov": "nyc npm run test",
     "version": "npm run build",
-    "release": "release-it"
+    "release": "release-it",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "husky": {
     "hooks": {
@@ -69,7 +71,9 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "xlsx-populate2": "^1.19.1"
-  }
+    "lodash": "^4.17.20",
+    "xlsx-populate2": "^1.19.1",
+    "snyk": "^1.456.0"
+  },
+  "snyk": true
 }

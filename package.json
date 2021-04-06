@@ -69,7 +69,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "xlsx-populate2": "^1.19.1"
   }
 }
